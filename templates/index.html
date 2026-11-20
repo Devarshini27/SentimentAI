@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentimentAI | Intelligent Text Analysis</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="background-glow glow-one"></div>
+<div class="background-glow glow-two"></div>
+
+<nav class="navbar">
+    <a href="#" class="brand">
+        <div class="brand-icon">S</div>
+        <span>Sentiment<span class="brand-highlight">AI</span></span>
+    </a>
+
+    <div class="nav-links">
+        <a href="#analyzer">Analyzer</a>
+        <a href="#analytics">Analytics</a>
+        <a href="#history">History</a>
+    </div>
+
+    <a href="#analyzer" class="nav-button">Try Analyzer <span>↗</span></a>
+</nav>
+
+<header class="hero">
+    <div class="hero-content">
+
+        <div class="announcement">
+            <span class="live-dot"></span>
+            POWERED BY DISTILBERT AI
+        </div>
+
+        <h1>
+            Understand the
+            <span class="gradient-text">feeling</span>
+            behind every word.
+        </h1>
+
+        <p class="hero-description">
+            Discover the emotions hidden in your text with intelligent
+            sentiment analysis powered by advanced AI and Natural
+            Language Processing.
+        </p>
+
+        <div class="hero-actions">
+            <a href="#analyzer" class="primary-button">
+                Start Analyzing <span>→</span>
+            </a>
+            <a href="#analytics" class="secondary-button">
+                Explore Dashboard
+            </a>
+        </div>
+
+        <div class="hero-features">
+            <div><span class="feature-check">✓</span> AI Powered</div>
+            <div><span class="feature-check">✓</span> Instant Results</div>
+            <div><span class="feature-check">✓</span> Easy to Use</div>
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <div class="visual-orbit orbit-one"></div>
+        <div class="visual-orbit orbit-two"></div>
+
+        <div class="floating-card card-top">
+            <span class="mini-icon purple">✦</span>
+            <div>
+                <small>AI ANALYSIS</small>
+                <strong>Understanding emotions</strong>
+            </div>
+        </div>
+
+        <div class="brain-circle">
+            <div class="brain-inner">✧</div>
+            <div class="brain-ring"></div>
+        </div>
+
+        <div class="floating-card card-bottom">
+            <div class="sentiment-emoji">😊</div>
+            <div>
+                <small>SENTIMENT DETECTED</small>
+                <strong>Positive feeling</strong>
+            </div>
+            <span class="result-check">✓</span>
+        </div>
+
+        <div class="spark spark-one">✦</div>
+        <div class="spark spark-two">✧</div>
+        <div class="spark spark-three">✦</div>
+    </div>
+</header>
+
+<main class="main-content">
+
+    <section class="section-heading" id="analyzer">
+        <div class="section-tag">✦ INTELLIGENT ANALYSIS</div>
+        <h2>Let's understand your <span class="gradient-text">text.</span></h2>
+        <p>Enter a sentence, review, or comment and let our AI discover its sentiment.</p>
+    </section>
+
+    <section class="analyzer-card">
+
+        <div class="analyzer-top">
+            <div>
+                <div class="analyzer-title">
+                    <span class="title-icon">✎</span>
+                    Text Analyzer
+                </div>
+                <p>What would you like to analyze today?</p>
+            </div>
+            <div class="model-badge">
+                <span class="live-dot"></span>
+                DistilBERT Model
+            </div>
+        </div>
+
+        <div class="input-container">
+            <textarea
+                id="textInput"
+                maxlength="2000"
+                placeholder="Type or paste your text here...
+
+For example: I absolutely love this product! The quality is amazing and the experience was wonderful."
+            ></textarea>
+
+            <div class="input-footer">
+                <span id="charCount">0 / 2000 characters</span>
+                <button id="clearInput" class="clear-button">Clear text</button>
+            </div>
+        </div>
+
+        <div class="examples">
+            <span>Try an example:</span>
+            <button class="example-chip" data-text="I absolutely love this product! The quality is amazing and I am very happy with my purchase.">😊 Positive</button>
+            <button class="example-chip" data-text="This was a terrible experience. The service was disappointing and I am extremely unhappy.">😞 Negative</button>
+            <button class="example-chip" data-text="The package arrived yesterday and contains all the items I ordered.">😐 Neutral</button>
+        </div>
+
+        <button id="analyzeButton" class="analyze-button">
+            <span class="button-icon">✧</span>
+            <span id="buttonText">Analyze Sentiment</span>
+            <span class="button-arrow">→</span>
+        </button>
+
+        <div id="loadingState" class="loading-state hidden">
+            <div class="loader"></div>
+            <span>Our AI is analyzing your text...</span>
+        </div>
+
+        <div id="errorMessage" class="error-message hidden"></div>
+
+    </section>
+
+    <section id="resultSection" class="result-section hidden">
+
+        <div class="result-heading">
+            <div>
+                <div class="section-tag">✦ ANALYSIS COMPLETE</div>
+                <h2>Your sentiment <span class="gradient-text">result.</span></h2>
+            </div>
+            <span class="success-label">✓ Successfully analyzed</span>
+        </div>
+
+        <div class="result-grid">
+
+            <div class="result-main-card">
+                <div class="result-card-label">PREDICTED SENTIMENT</div>
+                <div id="resultEmoji" class="result-emoji">😊</div>
+                <h3 id="sentimentResult">Positive</h3>
+                <p id="resultDescription">Your text expresses a positive sentiment.</p>
+                <div id="sentimentPill" class="sentiment-pill positive">POSITIVE</div>
+            </div>
+
+            <div class="confidence-card">
+                <div class="result-card-label">MODEL CONFIDENCE</div>
+
+                <div class="confidence-circle" id="confidenceCircle">
+                    <div class="confidence-inner">
+                        <strong id="confidenceValue">0%</strong>
+                        <span>Confidence</span>
+                    </div>
+                </div>
+
+                <p>The model's confidence in its predicted class.</p>
+            </div>
+
+        </div>
+
+        <div class="analyzed-text-card">
+            <div class="result-card-label">YOUR ANALYZED TEXT</div>
+            <p id="analyzedText"></p>
+        </div>
+
+        <button id="analyzeAgain" class="secondary-button analyze-again">
+            Analyze Another Text ↗
+        </button>
+
+    </section>
+
+    <section id="analytics" class="analytics-section">
+
+        <div class="section-heading">
+            <div class="section-tag">✦ YOUR INSIGHTS</div>
+            <h2>Analysis <span class="gradient-text">overview.</span></h2>
+            <p>Keep track of your sentiment analysis activity.</p>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Total Analyses</span>
+                    <span class="stat-icon purple-bg">⌁</span>
+                </div>
+                <strong id="totalAnalyses">0</strong>
+                <small>Texts analyzed this session</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Positive</span>
+                    <span class="stat-icon green-bg">☺</span>
+                </div>
+                <strong id="positiveCount">0</strong>
+                <small>Positive predictions</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Negative</span>
+                    <span class="stat-icon red-bg">☹</span>
+                </div>
+                <strong id="negativeCount">0</strong>
+                <small>Negative predictions</small>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Neutral</span>
+                    <span class="stat-icon blue-bg">◉</span>
+                </div>
+                <strong id="neutralCount">0</strong>
+                <small>Neutral predictions</small>
+            </div>
+
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-heading">
+                <div>
+                    <h3>Sentiment distribution</h3>
+                    <p>A visual breakdown of your analyzed texts.</p>
+                </div>
+                <span class="chart-label">LIVE SESSION</span>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="sentimentChart"></canvas>
+            </div>
+            <div id="chartEmpty" class="chart-empty">
+                Your chart will appear after your first analysis.
+            </div>
+        </div>
+
+    </section>
+
+    <section id="history" class="history-section">
+
+        <div class="history-heading">
+            <div>
+                <div class="section-tag">✦ RECENT ACTIVITY</div>
+                <h2>Your analysis <span class="gradient-text">history.</span></h2>
+            </div>
+
+            <button id="clearHistory" class="clear-history-button">
+                ♲ Clear History
+            </button>
+        </div>
+
+        <div id="historyList" class="history-list">
+            <div class="empty-history">
+                <div class="empty-icon">⌁</div>
+                <h3>No analysis yet</h3>
+                <p>Your recent analyses will appear here.</p>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+    <a href="#" class="brand footer-brand">
+        <div class="brand-icon">S</div>
+        <span>Sentiment<span class="brand-highlight">AI</span></span>
+    </a>
+
+    <p>Intelligence behind every word.</p>
+    <span>Powered by DistilBERT · Built with AI & NLP</span>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
